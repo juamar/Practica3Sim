@@ -79,23 +79,16 @@ to minions-generation
   ask minion 12 [set ycor -3]
   ask minion 13[set ycor -6]
 
+  ask minions
+  [
+    let team1 team
+    set enemy min-one-of other minions with [team != team1] [distance myself]
+  ]
+
 end
 
 
 to go
-  let win1 false
-  ask minions
-  [
-    get_enemy
-    if enemy = nobody
-    [
-      set win1 true
-    ]
-  ]
-  if win1
-  [
-    win
-  ]
   ask minions
   [
     movement
@@ -105,6 +98,7 @@ to go
 end
 
 to movement
+  get_enemy
   face enemy
   ;fd random-float 0.1 rt random-float (0.5 + 0.5) - 0.5
   fd 0.3
@@ -128,12 +122,7 @@ to punch
 end
 
 to get_enemy
-  if enemy = false
-  [
-    let team1 team
-    set enemy min-one-of other minions with [team != team1] [distance myself]
-  ]
-  if enemy != one-of minions
+  if enemy = nobody
   [
     let team1 team
     let enemy-tower one-of towers with [team != team1]
@@ -145,11 +134,6 @@ to get_enemy
       set enemy one-of nexos with [team != team1]
     ]
   ]
-end
-
-to win
-  user-message (word "There are " count turtles " turtles.")
-  stop go
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
