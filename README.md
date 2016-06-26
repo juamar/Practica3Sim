@@ -11,3 +11,6 @@ Juego acaba sin dar errores pero sin detectar ganador.
 
 b0.0004
 Juego acaba y detecta ganador.
+
+b0.0005
+Generación automática de minions cada 100 ticks.
