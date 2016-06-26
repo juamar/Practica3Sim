@@ -2,11 +2,12 @@ extensions [sound]
 
 breed [nexos nexo]
 breed [minions minion]
-minions-own [team hp damage cadence critic enemy]
-nexos-own [hp team]
-
 breed [towers tower]
-towers-own [team hp damage range]
+
+minions-own [team hp damage cadence critic enemy range]
+nexos-own [hp team]
+towers-own [team hp damage range enemy]
+
 ;vuelta es un iterador, foward1 es la distancia que se ha de mover en cada tick la torre para generar el circulo, range1 es el valor de range de las torres.
 globals [vuelta foward1 range1 win won1 winner]
 
@@ -34,8 +35,32 @@ to towers-generation
 
   set vuelta 0
 
-  create-towers 1 [set shape "circle" set heading 0 set range 10 fd range set range1 range set heading 90 set color blue  set team 1 set xcor min-pxcor + 20]
-  create-towers 1 [set shape "circle" set heading 0 set range 10 fd range set range1 range set heading 90 set color red set team 2 set xcor max-pxcor - 20]
+  create-towers 1
+  [
+    set shape "circle"
+    set heading 0
+    set range 10
+    fd range
+    set range1 range
+    set heading 90
+    set color blue
+    set team 1 set
+    xcor min-pxcor + 20
+    set damage 10
+  ]
+  create-towers 1
+  [
+    set shape "circle"
+    set heading 0
+    set range 10
+    fd range
+    set range1 range
+    set heading 90
+    set color red
+    set team 2
+    set xcor max-pxcor - 20
+    set damage 10
+  ]
 
   ;el perimetro del circulo entre 360 movimientos (360 grados...)
   set foward1 (2 * pi * range1) / 360
@@ -50,7 +75,11 @@ to towers-generation
     [
       ask towers [pu]
     ]
-    ask towers [fd foward1 set heading (heading + 1)]
+    ask towers
+    [
+      fd foward1
+      set heading (heading + 1)
+    ]
     set vuelta vuelta + 1
   ]
   ask towers [set heading 180 fd range]
@@ -60,8 +89,8 @@ end
 
 to nexos-generation
 
-  create-nexos 1 [set shape "nexo" set color blue set size 7 set xcor min-pxcor + 5  set ycor 0 set hp 10 set team 1]
-  create-nexos 1 [set shape "nexo" set color red set size 7 set xcor max-pxcor - 5 set ycor 0 set hp 10 set team 2]
+  create-nexos 1 [set shape "nexo" set color blue set size 7 set xcor min-pxcor + 5  set ycor 0 set hp 1000 set team 1]
+  create-nexos 1 [set shape "nexo" set color red set size 7 set xcor max-pxcor - 5 set ycor 0 set hp 1000 set team 2]
 
 end
 
@@ -69,19 +98,155 @@ end
 to minions-generation
 
    ;;minions
-  create-minions 5[set color blue set heading 90 set size 1 set team 1 set hp 100 set damage 2 set cadence 2 set critic 2 set xcor min-pxcor + 15]
-  ask minion 4 [set ycor 6]
-  ask minion 5 [set ycor 3]
-  ask minion 6 [set ycor 0]
-  ask minion 7 [set ycor -3]
-  ask minion 8 [set ycor -6]
+  create-minions 1
+  [
+    set color blue
+    set heading 90
+    set size 1
+    set team 1
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor min-pxcor + 15
+    set ycor 6
+  ]
 
-  create-minions 5[set color red set heading 270 set size 1 set team 2 set hp 100 set damage 2 set cadence 2 set critic 2 set xcor max-pxcor - 15]
-  ask minion 9 [set ycor 6]
-  ask minion 10 [set ycor 3]
-  ask minion 11 [set ycor 0]
-  ask minion 12 [set ycor -3]
-  ask minion 13[set ycor -6]
+  create-minions 1
+  [
+    set color blue
+    set heading 90
+    set size 1
+    set team 1
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor min-pxcor + 15
+    set ycor 3
+  ]
+
+  create-minions 1
+  [
+    set color blue
+    set heading 90
+    set size 1
+    set team 1
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor min-pxcor + 15
+    set ycor 0
+  ]
+
+  create-minions 1
+  [
+    set color blue
+    set heading 90
+    set size 1
+    set team 1
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor min-pxcor + 15
+    set ycor -3
+  ]
+
+  create-minions 1
+  [
+    set color blue
+    set heading 90
+    set size 1
+    set team 1
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor min-pxcor + 15
+    set ycor -6
+  ]
+
+  create-minions 1
+  [
+    set color red
+    set heading 270
+    set size 1
+    set team 2
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor max-pxcor - 15
+    set ycor 6
+  ]
+
+   create-minions 1
+  [
+    set color red
+    set heading 270
+    set size 1
+    set team 2
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor max-pxcor - 15
+    set ycor 3
+  ]
+
+  create-minions 1
+  [
+    set color red
+    set heading 270
+    set size 1
+    set team 2
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor max-pxcor - 15
+    set ycor 0
+  ]
+
+  create-minions 1
+  [
+    set color red
+    set heading 270
+    set size 1
+    set team 2
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor max-pxcor - 15
+    set ycor -3
+  ]
+
+  create-minions 1
+  [
+    set color red
+    set heading 270
+    set size 1
+    set team 2
+    set hp 100
+    set damage 2
+    set cadence 2
+    set critic 2
+    set range 1
+    set xcor max-pxcor - 15
+    set ycor -6
+  ]
 
   ask minions
   [
@@ -93,6 +258,12 @@ end
 
 
 to go
+
+  if round (ticks / 100) * 100 - (ticks / 100) * 100  = 0
+  [
+    minions-generation
+  ]
+
   if win = true
   [
     stop
@@ -102,6 +273,12 @@ to go
     movement
     punch
   ]
+
+  ask towers
+  [
+    punch
+  ]
+
   tick
 end
 
@@ -124,15 +301,26 @@ to punch
   ]
   let damage1 damage
   let team1 team
-  if distance enemy < 1
+
+   ask towers
   [
-    ask enemy
+    let range2 range
+    set enemy one-of minions in-radius range2 with [team != team1]
+  ]
+
+  ; si es una torre, puede que no tenga enemigo.
+  if enemy != nobody
+  [
+    if distance enemy < range
     [
-      set hp hp - damage1
-      if hp <= 0
+      ask enemy
       [
-        sound:play-sound "Slap.wav"
-        die
+        set hp hp - damage1
+        if hp <= 0
+        [
+          ;sound:play-sound "Slap.wav"
+          die
+        ]
       ]
     ]
   ]
@@ -142,13 +330,17 @@ to get_enemy
   if enemy = nobody
   [
     let team1 team
-    let enemy-tower one-of towers with [team != team1]
-    ifelse enemy-tower != nobody
+    set enemy min-one-of other minions with [team != team1] [distance myself]
+    if enemy = nobody
     [
-      set enemy enemy-tower
-    ]
-    [
-      set enemy one-of nexos with [team != team1]
+      let enemy-tower one-of towers with [team != team1]
+      ifelse enemy-tower != nobody
+      [
+        set enemy enemy-tower
+      ]
+      [
+        set enemy one-of nexos with [team != team1]
+      ]
     ]
   ]
 end
@@ -159,7 +351,7 @@ to set-win-true
   [
     set winner team
   ]
-  print word "win " team
+  print word "win team" team
 end
 
 to won
@@ -173,7 +365,6 @@ to won
     user-message "ha ganado el equipo rojo!"
   ]
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 330
