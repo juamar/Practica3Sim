@@ -8,7 +8,7 @@ nexos-own [hp team]
 breed [towers tower]
 towers-own [team hp damage range]
 ;vuelta es un iterador, foward1 es la distancia que se ha de mover en cada tick la torre para generar el circulo, range1 es el valor de range de las torres.
-globals [vuelta foward1 range1]
+globals [vuelta foward1 range1 win won1]
 
 
 to setup
@@ -22,6 +22,10 @@ to setup
   nexos-generation
 
   minions-generation
+
+  set win false
+
+  set won1 0
 
 end
 
@@ -89,6 +93,10 @@ end
 
 
 to go
+  if win = true
+  [
+    stop
+  ]
   ask minions
   [
     movement
@@ -99,12 +107,21 @@ end
 
 to movement
   get_enemy
+  if enemy = nobody
+  [
+    set-win-true
+    stop
+  ]
   face enemy
   ;fd random-float 0.1 rt random-float (0.5 + 0.5) - 0.5
   fd 0.3
 end
 
 to punch
+  if win = true
+  [
+    stop
+  ]
   let damage1 damage
   let team1 team
   if distance enemy < 1
@@ -135,6 +152,16 @@ to get_enemy
     ]
   ]
 end
+
+to set-win-true
+  set win true
+  print "win"
+end
+
+to won
+  user-message ("ha ganado!")
+end
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 330
@@ -186,7 +213,7 @@ BUTTON
 166
 138
 go
-go
+ifelse win != true\n[\n go\n]\n[\n if won1 = 0\n [\n  won\n  set won1 won1 + 1\n ]\n]
 T
 1
 T
