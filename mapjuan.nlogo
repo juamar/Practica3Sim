@@ -8,7 +8,7 @@ nexos-own [hp team]
 breed [towers tower]
 towers-own [team hp damage range]
 ;vuelta es un iterador, foward1 es la distancia que se ha de mover en cada tick la torre para generar el circulo, range1 es el valor de range de las torres.
-globals [vuelta foward1 range1 win won1]
+globals [vuelta foward1 range1 win won1 winner]
 
 
 to setup
@@ -155,11 +155,23 @@ end
 
 to set-win-true
   set win true
-  print "win"
+  ask nexos
+  [
+    set winner team
+  ]
+  print word "win " team
 end
 
 to won
-  user-message ("ha ganado!")
+  if winner = 1
+  [
+    user-message "ha ganado el equipo azul!"
+  ]
+
+  if winner = 2
+  [
+    user-message "ha ganado el equipo rojo!"
+  ]
 end
 
 @#$#@#$#@
