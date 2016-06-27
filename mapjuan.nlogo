@@ -4,9 +4,9 @@ breed [nexos nexo]
 breed [minions minion]
 breed [towers tower]
 
-minions-own [team hp damage cadence critic enemy range]
+minions-own [team hp damage cadence critic enemy range additionalDamage]
 nexos-own [hp team]
-towers-own [team hp damage range enemy]
+towers-own [team hp damage cadence range enemy critic additionalDamage]
 
 ;vuelta es un iterador, foward1 es la distancia que se ha de mover en cada tick la torre para generar el circulo, range1 es el valor de range de las torres.
 globals [vuelta foward1 range1 win won1 winner]
@@ -46,7 +46,10 @@ to towers-generation
     set color blue
     set team 1 set
     xcor min-pxcor + 20
-    set damage 10
+    set damage 4
+    set critic 0
+    set cadence 2
+    set hp 5000
   ]
   create-towers 1
   [
@@ -59,7 +62,10 @@ to towers-generation
     set color red
     set team 2
     set xcor max-pxcor - 20
-    set damage 10
+    set damage 4
+    set critic 0
+    set cadence 2
+    set hp 5000
   ]
 
   ;el perimetro del circulo entre 360 movimientos (360 grados...)
@@ -105,10 +111,11 @@ to minions-generation
     set size 1
     set team 1
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage b-dmg
+    set cadence b-cadence
+    set critic b-critic
     set range 1
+    set additionalDamage 0
     set xcor min-pxcor + 15
     set ycor 6
   ]
@@ -120,10 +127,11 @@ to minions-generation
     set size 1
     set team 1
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage b-dmg
+    set cadence b-cadence
+    set critic b-critic
     set range 1
+    set additionalDamage 0
     set xcor min-pxcor + 15
     set ycor 3
   ]
@@ -135,10 +143,11 @@ to minions-generation
     set size 1
     set team 1
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage b-dmg
+    set cadence b-cadence
+    set critic b-critic
     set range 1
+    set additionalDamage 0
     set xcor min-pxcor + 15
     set ycor 0
   ]
@@ -150,10 +159,11 @@ to minions-generation
     set size 1
     set team 1
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage b-dmg
+    set cadence b-cadence
+    set critic b-critic
     set range 1
+    set additionalDamage 0
     set xcor min-pxcor + 15
     set ycor -3
   ]
@@ -165,10 +175,11 @@ to minions-generation
     set size 1
     set team 1
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage b-dmg
+    set cadence b-cadence
+    set critic b-critic
     set range 1
+    set additionalDamage 0
     set xcor min-pxcor + 15
     set ycor -6
   ]
@@ -180,10 +191,11 @@ to minions-generation
     set size 1
     set team 2
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage r-dmg
+    set cadence r-cadence
+    set critic r-critic
     set range 1
+    set additionalDamage 0
     set xcor max-pxcor - 15
     set ycor 6
   ]
@@ -195,10 +207,11 @@ to minions-generation
     set size 1
     set team 2
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage r-dmg
+    set cadence r-cadence
+    set critic r-critic
     set range 1
+    set additionalDamage 0
     set xcor max-pxcor - 15
     set ycor 3
   ]
@@ -210,9 +223,9 @@ to minions-generation
     set size 1
     set team 2
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage r-dmg
+    set cadence r-cadence
+    set critic r-critic
     set range 1
     set xcor max-pxcor - 15
     set ycor 0
@@ -225,10 +238,11 @@ to minions-generation
     set size 1
     set team 2
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage r-dmg
+    set cadence r-cadence
+    set critic r-critic
     set range 1
+    set additionalDamage 0
     set xcor max-pxcor - 15
     set ycor -3
   ]
@@ -240,10 +254,11 @@ to minions-generation
     set size 1
     set team 2
     set hp 100
-    set damage 2
-    set cadence 2
-    set critic 2
+    set damage r-dmg
+    set cadence r-cadence
+    set critic r-critic
     set range 1
+    set additionalDamage 0
     set xcor max-pxcor - 15
     set ycor -6
   ]
@@ -271,12 +286,31 @@ to go
   ask minions
   [
     movement
-    punch
+    if round (ticks / cadence) * cadence  - (ticks / cadence) * cadence  = 0
+    [
+      punch
+    ]
   ]
 
   ask towers
   [
-    punch
+    if round (ticks / cadence) * cadence - (ticks / cadence) * cadence  = 0
+    [
+      punch
+    ]
+  ]
+
+  if show-hp?
+  [
+    ask nexos
+    [
+      set label hp
+    ]
+
+    ask towers
+    [
+      set label hp
+    ]
   ]
 
   tick
@@ -299,8 +333,11 @@ to punch
   [
     stop
   ]
+  get-critic
   let damage1 damage
+  set damage1 damage1 + Additionaldamage
   let team1 team
+  let critic1 critic
 
    ask towers
   [
@@ -344,6 +381,45 @@ to get_enemy
     ]
   ]
 end
+
+to get-critic
+
+  let critic1 critic
+
+  if critic1 = 0[
+    set additionalDamage 0
+  ]
+
+  if critic1 = 1[
+    let random1 random 5
+    if random1 = 1 [
+      set additionalDamage 2
+    ]
+  ]
+
+    if critic1 = 2[
+    let random1 random 4
+    if random1 = 1 [
+      set additionalDamage 2
+    ]
+  ]
+
+  if critic1 = 3[
+    let random1 random 3
+    if random1 = 1 [
+      set additionalDamage 2
+    ]
+  ]
+  if critic1 = 4[
+    let random1 random 2
+    if random1 = 1 [
+      set additionalDamage 2
+    ]
+  ]
+
+end
+
+
 
 to set-win-true
   set win true
@@ -394,10 +470,10 @@ ticks
 30.0
 
 BUTTON
-80
-61
-149
-94
+24
+321
+258
+354
 Set-up
 setup
 NIL
@@ -411,10 +487,10 @@ NIL
 1
 
 BUTTON
-79
-105
-166
-138
+24
+356
+258
+389
 go
 ifelse win != true\n[\n go\n]\n[\n if won1 = 0\n [\n  won\n  set won1 won1 + 1\n ]\n]
 T
@@ -426,6 +502,117 @@ NIL
 NIL
 NIL
 1
+
+CHOOSER
+29
+61
+121
+106
+b-critic
+b-critic
+0 1 2 3 4
+2
+
+CHOOSER
+29
+108
+121
+153
+b-hp
+b-hp
+100 200 300 400 500
+0
+
+CHOOSER
+29
+155
+121
+200
+b-dmg
+b-dmg
+2 4 6 8 10
+2
+
+TEXTBOX
+15
+21
+141
+59
+Blue Team Values
+15
+0.0
+1
+
+TEXTBOX
+158
+20
+308
+39
+Red Team Values
+15
+0.0
+1
+
+CHOOSER
+166
+61
+258
+106
+r-critic
+r-critic
+0 1 2 3 4
+0
+
+CHOOSER
+166
+108
+258
+153
+r-hp
+r-hp
+100 200 300 400 500
+1
+
+CHOOSER
+166
+155
+258
+200
+r-dmg
+r-dmg
+2 4 6 8 10
+0
+
+CHOOSER
+166
+202
+258
+247
+r-cadence
+r-cadence
+5 4 3 2 1
+0
+
+CHOOSER
+29
+202
+121
+247
+b-cadence
+b-cadence
+5 4 3 2 1
+4
+
+SWITCH
+100
+277
+209
+310
+show-hp?
+show-hp?
+1
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
