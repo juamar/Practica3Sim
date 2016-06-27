@@ -9,7 +9,7 @@ nexos-own [hp team]
 towers-own [team hp damage cadence range enemy critic additionalDamage]
 
 ;vuelta es un iterador, foward1 es la distancia que se ha de mover en cada tick la torre para generar el circulo, range1 es el valor de range de las torres.
-globals [vuelta foward1 range1 win won1 winner]
+globals [vuelta foward1 range1 win won1 winner b-hp-value b-dmg-value b-critic-value b-cadence-value r-hp-value r-dmg-value r-critic-value r-cadence-value]
 
 
 to setup
@@ -17,6 +17,8 @@ to setup
   clear-all
 
   reset-ticks
+
+  check-stats
 
   towers-generation
 
@@ -301,18 +303,16 @@ to go
     ]
   ]
 
-  if show-hp?
+  ask nexos
   [
-    ask nexos
-    [
-      set label hp
-    ]
-
-    ask towers
-    [
-      set label hp
-    ]
+    set label hp
   ]
+
+  ask towers
+  [
+    set label hp
+  ]
+
 
   tick
 end
@@ -429,6 +429,90 @@ end
 
 
 
+
+to check-stats
+
+  check-blue-stats
+  check-red-stats
+
+  if b-hp-value + b-dmg-value + b-critic-value + b-cadence-value > 12
+  [
+    user-message "Equipo Azul: Los stats no estan equilibrados. Equilíbralos!"
+  ]
+
+  if b-hp-value + b-dmg-value + b-critic-value + b-cadence-value < 12
+  [
+    user-message "Equipo Azul: Todavía tienes puntos para repartir. Repártelos!"
+  ]
+
+  if r-hp-value + r-dmg-value + r-critic-value + r-cadence-value > 12
+  [
+    user-message "Equipo Rojo: Los stats no estan equilibrados. Equilíbralos."
+  ]
+
+  if r-hp-value + r-dmg-value + r-critic-value + r-cadence-value < 12
+  [
+    user-message "Equipo Rojo: Todavía tienes puntos para repartir. Repártelos!"
+  ]
+
+end
+
+to check-blue-stats
+
+  if b-hp = 100 [set b-hp-value 1]
+  if b-hp = 200 [set b-hp-value 2]
+  if b-hp = 300 [set b-hp-value 3]
+  if b-hp = 400 [set b-hp-value 4]
+  if b-hp = 500 [set b-hp-value 5]
+
+  if b-dmg = 1  [set b-dmg-value 1]
+  if b-dmg = 2  [set b-dmg-value 2]
+  if b-dmg = 3  [set b-dmg-value 3]
+  if b-dmg = 4  [set b-dmg-value 4]
+  if b-dmg = 5  [set b-dmg-value 5]
+
+  if b-critic = 0 [set b-critic-value 1]
+  if b-critic = 1 [set b-critic-value 2]
+  if b-critic = 2 [set b-critic-value 3]
+  if b-critic = 3 [set b-critic-value 4]
+  if b-critic = 4 [set b-critic-value 5]
+
+  if b-cadence = 1 [set b-cadence-value 1]
+  if b-cadence = 2 [set b-cadence-value 2]
+  if b-cadence = 3 [set b-cadence-value 3]
+  if b-cadence = 4 [set b-cadence-value 4]
+  if b-cadence = 5 [set b-cadence-value 5]
+
+end
+
+to check-red-stats
+
+  if r-hp = 100 [set r-hp-value 1]
+  if r-hp = 200 [set r-hp-value 2]
+  if r-hp = 300 [set r-hp-value 3]
+  if r-hp = 400 [set r-hp-value 4]
+  if r-hp = 500 [set r-hp-value 5]
+
+  if r-dmg = 1  [set r-dmg-value 1]
+  if r-dmg = 2  [set r-dmg-value 2]
+  if r-dmg = 3  [set r-dmg-value 3]
+  if r-dmg = 4  [set r-dmg-value 4]
+  if r-dmg = 5  [set r-dmg-value 5]
+
+  if r-critic = 0 [set r-critic-value 1]
+  if r-critic = 1 [set r-critic-value 2]
+  if r-critic = 2 [set r-critic-value 3]
+  if r-critic = 3 [set r-critic-value 4]
+  if r-critic = 4 [set r-critic-value 5]
+
+  if r-cadence = 1 [set r-cadence-value 1]
+  if r-cadence = 2 [set r-cadence-value 2]
+  if r-cadence = 3 [set r-cadence-value 3]
+  if r-cadence = 4 [set r-cadence-value 4]
+  if r-cadence = 5 [set r-cadence-value 5]
+
+end
+
 to set-win-true
   set win true
   ask nexos
@@ -513,19 +597,19 @@ NIL
 
 CHOOSER
 29
-61
+155
 121
-106
+200
 b-critic
 b-critic
 0 1 2 3 4
-2
+4
 
 CHOOSER
 29
-108
+61
 121
-153
+106
 b-hp
 b-hp
 100 200 300 400 500
@@ -533,12 +617,12 @@ b-hp
 
 CHOOSER
 29
-155
+108
 121
-200
+153
 b-dmg
 b-dmg
-2 4 6 8 10
+1 2 3 4 5
 2
 
 TEXTBOX
@@ -546,7 +630,7 @@ TEXTBOX
 21
 141
 59
-Blue Team Values
+Blue Team Stats
 15
 0.0
 1
@@ -556,29 +640,9 @@ TEXTBOX
 20
 308
 39
-Red Team Values
+Red Team Stats
 15
 0.0
-1
-
-CHOOSER
-166
-61
-258
-106
-r-critic
-r-critic
-0 1 2 3 4
-0
-
-CHOOSER
-166
-108
-258
-153
-r-hp
-r-hp
-100 200 300 400 500
 1
 
 CHOOSER
@@ -586,10 +650,30 @@ CHOOSER
 155
 258
 200
+r-critic
+r-critic
+0 1 2 3 4
+2
+
+CHOOSER
+166
+61
+258
+106
+r-hp
+r-hp
+100 200 300 400 500
+2
+
+CHOOSER
+166
+108
+258
+153
 r-dmg
 r-dmg
-2 4 6 8 10
-0
+1 2 3 4 5
+2
 
 CHOOSER
 166
@@ -599,7 +683,7 @@ CHOOSER
 r-cadence
 r-cadence
 5 4 3 2 1
-0
+2
 
 CHOOSER
 29
@@ -609,18 +693,7 @@ CHOOSER
 b-cadence
 b-cadence
 5 4 3 2 1
-4
-
-SWITCH
-100
-277
-209
-310
-show-hp?
-show-hp?
-0
-1
--1000
+2
 
 @#$#@#$#@
 ## WHAT IS IT?
