@@ -46,7 +46,7 @@ to towers-generation
     set color blue
     set team 1 set
     xcor min-pxcor + 20
-    set damage 4
+    set damage 10
     set critic 0
     set cadence 2
     set hp 5000
@@ -62,7 +62,7 @@ to towers-generation
     set color red
     set team 2
     set xcor max-pxcor - 20
-    set damage 4
+    set damage 10
     set critic 0
     set cadence 2
     set hp 5000
@@ -296,6 +296,7 @@ to go
   [
     if round (ticks / cadence) * cadence - (ticks / cadence) * cadence  = 0
     [
+      get_enemy_towers
       punch
     ]
   ]
@@ -323,6 +324,7 @@ to movement
     set-win-true
     stop
   ]
+
   face enemy
   ;fd random-float 0.1 rt random-float (0.5 + 0.5) - 0.5
   fd 0.3
@@ -338,12 +340,6 @@ to punch
   set damage1 damage1 + Additionaldamage
   let team1 team
   let critic1 critic
-
-   ask towers
-  [
-    let range2 range
-    set enemy one-of minions in-radius range2 with [team != team1]
-  ]
 
   ; si es una torre, puede que no tenga enemigo.
   if enemy != nobody
@@ -379,6 +375,18 @@ to get_enemy
         set enemy one-of nexos with [team != team1]
       ]
     ]
+  ]
+end
+
+to get_enemy_towers
+  let team1 team
+  let range2 range
+
+  set enemy one-of minions in-radius range2 with [team != team1]
+
+  if enemy != nobody
+  [
+    create-link-with enemy [set color white]
   ]
 end
 
@@ -610,7 +618,7 @@ SWITCH
 310
 show-hp?
 show-hp?
-1
+0
 1
 -1000
 
