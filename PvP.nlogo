@@ -109,8 +109,8 @@ end
 
 to nexos-generation
 
-  create-nexos 1 [set shape "nexo" set color blue set size 7 set xcor min-pxcor + 5  set ycor 0 set hp 1000 set team 1]
-  create-nexos 1 [set shape "nexo" set color red set size 7 set xcor max-pxcor - 5 set ycor 0 set hp 1000 set team 2]
+  create-nexos 1 [set shape "nexo" set color blue set size 7 set xcor min-pxcor + 5  set ycor 0 set hp 10000 set team 1]
+  create-nexos 1 [set shape "nexo" set color red set size 7 set xcor max-pxcor - 5 set ycor 0 set hp 10000 set team 2]
 
 end
 
@@ -126,7 +126,7 @@ to minions-generation
     set team 1
     set hp 100
     set damage b-dmg
-    set cadence b-cadence
+    set cadence 6 - b-cadence
     set critic b-critic
     set range 1
     set additionalDamage 0
@@ -142,7 +142,7 @@ to minions-generation
     set team 1
     set hp 100
     set damage b-dmg
-    set cadence b-cadence
+    set cadence 6 - b-cadence
     set critic b-critic
     set range 1
     set additionalDamage 0
@@ -158,7 +158,7 @@ to minions-generation
     set team 1
     set hp 100
     set damage b-dmg
-    set cadence b-cadence
+    set cadence 6 - b-cadence
     set critic b-critic
     set range 1
     set additionalDamage 0
@@ -174,7 +174,7 @@ to minions-generation
     set team 1
     set hp 100
     set damage b-dmg
-    set cadence b-cadence
+    set cadence 6 - b-cadence
     set critic b-critic
     set range 1
     set additionalDamage 0
@@ -190,7 +190,7 @@ to minions-generation
     set team 1
     set hp 100
     set damage b-dmg
-    set cadence b-cadence
+    set cadence 6 - b-cadence
     set critic b-critic
     set range 1
     set additionalDamage 0
@@ -206,7 +206,7 @@ to minions-generation
     set team 2
     set hp 100
     set damage r-dmg
-    set cadence r-cadence
+    set cadence 6 - r-cadence
     set critic r-critic
     set range 1
     set additionalDamage 0
@@ -222,7 +222,7 @@ to minions-generation
     set team 2
     set hp 100
     set damage r-dmg
-    set cadence r-cadence
+    set cadence 6 - r-cadence
     set critic r-critic
     set range 1
     set additionalDamage 0
@@ -238,7 +238,7 @@ to minions-generation
     set team 2
     set hp 100
     set damage r-dmg
-    set cadence r-cadence
+    set cadence 6 - r-cadence
     set critic r-critic
     set range 1
     set xcor max-pxcor - 15
@@ -253,7 +253,7 @@ to minions-generation
     set team 2
     set hp 100
     set damage r-dmg
-    set cadence r-cadence
+    set cadence 6 - r-cadence
     set critic r-critic
     set range 1
     set additionalDamage 0
@@ -269,7 +269,7 @@ to minions-generation
     set team 2
     set hp 100
     set damage r-dmg
-    set cadence r-cadence
+    set cadence 6 - r-cadence
     set critic r-critic
     set range 1
     set additionalDamage 0
@@ -362,10 +362,10 @@ to punch
       [
         set hp hp - damage1
 
-          if team = 1[
+          if team = 2[        ;ask enemy -> entonces, cuando el enemigo recibe un punch, el equipo contrario suma 1 en punches
             set b-punches b-punches + 1
           ]
-          if team = 2[
+          if team = 1[
             set r-punches r-punches + 1
           ]
 
@@ -552,7 +552,7 @@ to set-win-true
   [
     set winner team
   ]
-  print word "win team" team
+  print word "win team " team
 end
 
 to won
@@ -638,7 +638,7 @@ CHOOSER
 b-critic
 b-critic
 0 1 2 3 4
-2
+3
 
 CHOOSER
 29
@@ -658,7 +658,7 @@ CHOOSER
 b-dmg
 b-dmg
 1 2 3 4 5
-0
+3
 
 TEXTBOX
 15
@@ -688,7 +688,7 @@ CHOOSER
 r-critic
 r-critic
 0 1 2 3 4
-4
+1
 
 CHOOSER
 166
@@ -708,7 +708,7 @@ CHOOSER
 r-dmg
 r-dmg
 1 2 3 4 5
-0
+1
 
 CHOOSER
 166
@@ -717,8 +717,8 @@ CHOOSER
 247
 r-cadence
 r-cadence
-5 4 3 2 1
-0
+1 2 3 4 5
+4
 
 CHOOSER
 29
@@ -727,14 +727,14 @@ CHOOSER
 247
 b-cadence
 b-cadence
-5 4 3 2 1
+1 2 3 4 5
 0
 
 PLOT
-426
-506
-870
-767
+431
+581
+875
+842
 Número de críticos
 NIL
 NIL
@@ -752,10 +752,10 @@ PENS
 "Red Critics" 1.0 0 -1604481 true "" "plot r-crit-num"
 
 MONITOR
-327
-505
-413
-550
+332
+580
+418
+625
 Blue Punches
 b-punches
 17
@@ -763,10 +763,10 @@ b-punches
 11
 
 MONITOR
-327
-556
-412
-601
+332
+631
+417
+676
 Red Punches
 r-punches
 17
@@ -774,10 +774,10 @@ r-punches
 11
 
 MONITOR
-328
-607
-411
-652
+333
+682
+416
+727
 Blue Critics
 b-crit-num
 17
@@ -785,10 +785,10 @@ b-crit-num
 11
 
 MONITOR
-328
-658
-410
-703
+333
+733
+415
+778
 Red Critics
 r-crit-num
 17
@@ -796,41 +796,306 @@ r-crit-num
 11
 
 @#$#@#$#@
-## WHAT IS IT?
+Modelatge, Simulació i Optimització
 
-Este modelo consiste en una batalla entre el equipo rojo y el equipo azul, con el objetivo de destruir el nexo enemigo.
+Pràctica 3 - Propuesta
 
-## HOW IT WORKS
+##Descripción general del modelo
 
-(what rules the agents use to create the overall behavior of the model)
+Simularemos un pequeño juego que consistirá en un PvP (player vs player) en el que tendremos un mapa, un nexo por jugador y una torre por jugador.
 
-## HOW TO USE IT
+Cada “x” segundos aparecerán un número de minions (oleada) en cada nexo que irán a atacar el nexo enemigo. Primero deberán derrotar a los minions enemigos, luego a las torres, y finalmente al nexo. El primer equipo que destruya al nexo enemigo, gana.
 
-(how to use the model, including a description of each of the items in the Interface tab)
+Cada minion tendrá los atributos “ataque”, “vida”, “cadencia” y “crítico”. Cada jugador tendrá “x” puntos a repartir entre estos atributos que se aplicarán a todos los minions de todas las oleadas de una partida.
 
-## THINGS TO NOTICE
 
-(suggested things for the user to notice while running the model)
 
-## THINGS TO TRY
 
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
 
-## EXTENDING THE MODEL
+## Objetivos
 
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+Objetivo del modelo:
 
-## NETLOGO FEATURES
+El objetivo del modelo es ganar la partida, es decir, que tu equipo destruya el nexo enemigo antes que el contrincante.
 
-(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+Objetivo de la simulación:
 
-## RELATED MODELS
+El objetivo de la simulación consiste en observar qué combinación de valores de atributos es más eficaz para ganar. Para llegar a este objetivo, realizaremos diferentes simulaciones en las que enfrentaremos un atributo contra otro. Por ejemplo:
 
-(models in the NetLogo Models Library and elsewhere which are of related interest)
+Simulación 1:
+
+Pondremos los atributos de los dos equipos al mínimo, y a continuación pondremos los valores al máximo de los atributos que queremos enfrentar. En este caso, enfrentamos el atributo “Vida” contra el atributo “Daño”.
+
+
+
+
+		Equipo Azul	Equipo Rojo
+Vida		500		100
+Daño		1		5
+Crítico		0		0
+Cadencia	5		5
+
+
+Después de realizar una serie de simulaciones, extraemos conclusiones. Si existe una clara ventaja de uno de los atributos sobre otro, diremos que ese atributo es eficaz contra el otro.
+
+En este caso concreto, después de varias simulaciones, hemos observado una clara ventaja del atributo “Daño” sobre el atributo “Vida”. Por lo tanto, “Daño” es eficaz contra “Vida”, o dicho de otro modo, vale más la pena invertir puntos en “Daño” que no en “Vida”.
+
+
+
+
+##Diseño preliminar de la solución.
+
+· Entradas:
+
+Los valores de cada minion:
+
+	· Ataque
+	· Vida
+		· Cadencia
+		· Crítico
+
+· Salidas:
+
+	· Informe de la partida (porcentaje de críticos, número de muertes, etc)
+
+· Experimento:
+
+	Realizar diferentes combinaciones de valores para ver cuál es la más efectiva y
+observar qué atributos son más efectivos.
+
+
+· Planificación de actividades:
+
+	· Creación del mapa
+	· Creación de nexos y torres
+	· Establecer características de las torres (rango, daño, vida, etc)
+	· Crear minions
+	· Establecer características simples de los minions para hacer que luchen entre ellos
+	· Establecer una prioridad de ataque de los minions:
+		Minion > Torre > Nexo
+	· Establecer reglas de ataque:
+		· Solo se puede luchar 1v1 entre minions
+		· La torre sólo puede golpear a 1 minion
+	· Creación de oleadas cada “x” segundos
+	· Establecer valores aleatorios a las características de los minions
+	· Establecer la opción de personalizar los valores de los minions
+
+
+##Experimentación
+
+· Simulación 1: Vida vs Daño
+
+
+		Equipo Azul	Equipo Rojo
+Vida		500		100
+Daño		1		5
+Crítico		0		0
+Cadencia	1		1
+
+Ganador: Daño (100%)
+
+
+· Simulación 2: Vida vs Crítico
+
+
+
+		Equipo Azul	Equipo Rojo
+Vida		500		100
+Daño		1		1
+Crítico		0		4
+Cadencia	1		1
+
+Ganador:  Crítico (100%)
+
+
+· Simulación 3: Vida vs Cadencia
+
+
+
+		Equipo Azul	Equipo Rojo
+Vida		500		100
+Daño		1		1
+Crítico		0		0
+Cadencia	1		5
+
+Ganador: Cadencia (100%)
+
+
+
+· Simulación 4: Daño vs Crítico
+
+		Equipo Azul	Equipo Rojo
+Vida		100		100
+Daño		5		1
+Crítico		0		4
+Cadencia	1		1
+
+Ganador: Daño (100%)
+
+Es matemáticamente imposible que Crítico ganase a Daño, ya que aún haciendo golpes críticos un 100% de las veces, el máximo daño que podrían hacer los minions del equipo rojo es 4 (Daño crítico hace 3 puntos de daño).
+
+
+· Simulación 5: Daño vs Cadencia
+
+
+
+		Equipo Azul	Equipo Rojo
+Vida		100		100
+Daño		5		1
+Crítico		0		0
+Cadencia	1		5
+
+Ganador: Empate
+
+Las partidas en las que se enfrentan estos dos atributos son extremadamente largas debido al equilibrio existente entre ellos.
+
+
+
+
+
+
+Simulación 6: Crítico vs Cadencia
+
+
+
+
+		Equipo Azul	Equipo Rojo
+Vida		100		100
+Daño		1		1
+Crítico		4		0
+Cadencia	1		5
+
+Ganador: Cadencia (100%)
+
+Es matemáticamente imposible que Crítico ganase a Cadencia, ya que aún haciendo golpes críticos un 100% de las veces, el máximo daño que podrían hacer los minions del equipo azul es 4 cada 5 ticks, mientras que los minions del equipo hacían 1 punto de daño cada 1 tick (5 cada 5 ticks).
+
+
+##Conclusiones de los experimentos
+
+Con las simulaciones hemos podido observar lo siguiente:
+
+· El atributo vida es muy débil, y en este modelo no compensa gastar puntos en dicho atributo.
+
+· Los atributos “Daño” y “Cadencia” están muy igualados.
+
+· Crítico es aparentemente débil contra “Daño” y “Cadencia”. No obstante, esa desigualdad es matemática. El atributo “Crítico” ofrece una característica aleatoria al modelo, y puede ser de gran ayuda si se combina con atributos como “Daño” y “Cadencia” de manera apropiada. La clave de las partidas será cómo jugamos con la combinación de esas variables.
+
+
+
+##Partidas reales
+
+A continuación crearemos tres equipos (Juan, Jordi, y Ignasi) repartiendo un máximo de 10 puntos entre todos los atributos. Cada equipo pondrá los atributos como crea que sean óptimos, y se realizarán partidas para ver qué combinación de las tres es la más eficaz.
+
+Equipos:
+
+
+		Juan		Jordi		Ignasi
+Vida		100 (Value: 1)	100 (Value: 1)	100 (Value: 1)
+Daño		4 (Value: 4)	3 (Value: 3)	2 (Value: 2)
+Crítico		3 ( Value: 4)	0 (Value: 1)	1 (Value: 2)
+Cadencia	1 ( Value: 1)	5 (Value: 5)	5 (Value: 5)
+
+
+
+
+Partida 1
+
+
+
+		Juan		Ignasi
+Vida		100		100
+Daño		4		2
+Crítico		3		1
+Cadencia	1		5
+
+Empate: Situación muy curiosa.
+
+Al inicio parece que el equipo “Ignasi” domina el encuentro. No obstante, se llega a un punto en el que la posición en la que se encuentra con los minions de Juan da una ventaja posicional a la torre, y elimina a todos los minions Ignasi antes de que estos puedan dañarla. La partida no termina nunca. Establecemos el empate.
+
+Partida 2
+
+
+		Juan		Jordi
+Vida		100		100
+Daño		4		3
+Crítico		3		0
+Cadencia	1		5
+
+Ganador: Jordi
+
+Jordi ha dominado desde el inicio el encuentro y ha aplastado a Juan brutalmente.
+
+
+Partida 3
+
+
+
+		Ignasi		Jordi
+Vida		100		100
+Daño		2		3
+Crítico		1		0
+Cadencia	5		5
+
+Ganador: Empate
+
+
+
+Partida infinita. Equipos muy equilibrados.
+
+A continuación repetiremos las partidas empatadas, y, a modo de desempate, disminuimos el daño de las torres a 1, para observar el más explícitamente el comportamiento de los minions y la configuración de sus atributos:
+
+Partida 1.1 (Daño de torres a 1)
+
+		Juan		Ignasi
+Vida		100		100
+Daño		4		2
+Crítico		3		1
+Cadencia	1		5
+
+Ganador: Ignasi
+
+Después de modificar el daño de las torres, el equipo “Juan” ha tenido poco que hacer frente a los 5 puntos de “Cadencia” del equipo “Ignasi”
+
+Partida 3.1 (Daño de torres a 1)
+
+		Ignasi		Jordi
+Vida		100		100
+Daño		2		3
+Crítico		1		0
+Cadencia	5		5
+
+Ganador: Jordi
+
+El arriesgado punto de Crítico del equipo de Ignasi no ha sido suficiente contra la inversión de Jordi en el punto más de Daño.
+
+
+##Conclusiones Finales
+
+El equipo más con más éxito ha sido “Jordi”.
+
+Después de observar los resultados de las partidas reales, podemos concluir que el atributo en el que más vale la pena invertir puntos es “Cadencia” seguido de “Daño”, “Crítico” y “Vida”.
+
+Se observa que estas conclusiones coinciden con las conclusiones de los experimentos. No obstante, pensábamos que el crítico iba a jugar un papel más importante en las simulaciones y en las partidas. Quizá una manera de dar más importancia al “Crítico” sería modificar el modelo y establecer un valor más alto de “Daño Adicional” cada vez que se ejecuta un golpe de estas características.
+
+
+La combinación más eficaz de la simulación ha sido la siguiente:
+
+		Jordi
+Vida		100
+Daño		3
+Crítico		0
+Cadencia	5
+
 
 ## CREDITS AND REFERENCES
 
-(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
+Ignasi Ibáñez
+Jordi Humet
+Juan Avendaño
+
+Trabajo practico de Simulación, modelaje y optmización.
+Profesora: Marcela Castro.
+Escoles universitaries Gimbernat i Tomàs Cerdà. GNU 2016.
 @#$#@#$#@
 default
 true
